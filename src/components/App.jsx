@@ -2,30 +2,13 @@ import InputForm from './InputForm/InputForm';
 import PhoneList from './PhoneList/PhoneList';
 import Filter from './Filter/Filter';
 import { Container, MyHeader } from './styled';
-import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addNote, changeFilter, deleteNote } from 'Redux/actions';
 
 const App = () => {
-  const [contacts, setContacts] = useState([]);
-  const [filter, setFilter] = useState('');
-
-  useEffect(() => {
-    const items = JSON.parse(localStorage.getItem('contacts'));
-
-    if (items !== null || items.length !== 0) {
-      setContacts(items);
-    }
-  }, []);
-
-  useEffect(
-    prevState => {
-      localStorage.setItem('contacts', JSON.stringify(contacts));
-
-      if (prevState === contacts && contacts.length !== 0) {
-        setContacts(JSON.parse(localStorage.getItem('contacts')));
-      }
-    },
-    [contacts]
-  );
+  const notes = useSelector(({ contacts: { items } }) => items);
+  const filter = useSelector(({ contacts: { filter } }) => filter);
+  const dispatch = useDispatch();
 
   const handleSubmitForm = (e, data) => {
     e.preventDefault();
@@ -35,19 +18,23 @@ const App = () => {
       return false;
     }
 
-    setContacts(state => [...state, data]);
+    dispatch(addNote(data));
 
     return true;
   };
 
-  const handleFilter = e => setFilter(e.currentTarget.value.toLowerCase());
+  const handleFilter = e =>
+    dispatch(changeFilter(e.currentTarget.value.toLowerCase()));
+
   const checkUsers = data =>
-    contacts.find(({ name }) => name.toLowerCase() === data.name.toLowerCase());
+    notes.find(({ name }) => name.toLowerCase() === data.name.toLowerCase());
+
   const deleteUser = deletedId => {
-    setContacts(contacts.filter(({ id }) => id !== deletedId));
+    dispatch(deleteNote(deletedId));
   };
+
   const filterUsers = () =>
-    contacts.filter(item => item.name.toLowerCase().includes(filter));
+    notes.filter(item => item.name.toLowerCase().includes(filter));
 
   return (
     <Container>
