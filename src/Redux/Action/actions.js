@@ -1,6 +1,10 @@
 import { createAction } from '@reduxjs/toolkit';
-import * as types from '../ActionCreators/actionCreators';
+import {
+  ADD_NOTE,
+  DELETE_NOTE,
+  CHANGE_FILTER,
+} from '../ActionCreators/actionCreators';
 
-export const addNote = createAction(types.ADD_NOTE);
-export const deleteNote = createAction(types.DELETE_NOTE);
-export const changeFilter = createAction(types.CHANGE_FILTER);
+export const addNote = createAction(ADD_NOTE);
+export const deleteNote = createAction(DELETE_NOTE);
+export const changeFilter = createAction(CHANGE_FILTER);
