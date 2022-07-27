@@ -11,7 +11,7 @@ import {
 import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
 import { getPersistConfig } from 'redux-deep-persist';
 import { configureStore } from '@reduxjs/toolkit';
-import noteReducer from './noteReducer';
+import noteReducer from '../Reducer/noteReducer';
 
 const preloadedState = {
   contacts: {
@@ -32,13 +32,13 @@ const persistedReducer = persistReducer(persistConfig, noteReducer);
 // export const store = createStore(persistedReducer, preloadedState);
 export const store = configureStore({
   reducer: persistedReducer,
+  preloadedState,
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }),
-  preloadedState,
 });
 
 export const persistor = persistStore(store);

@@ -3,7 +3,7 @@ import PhoneList from './PhoneList/PhoneList';
 import Filter from './Filter/Filter';
 import { Container, MyHeader } from './styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { addNote, changeFilter, deleteNote } from 'Redux/actions';
+import { addNote, changeFilter, deleteNote } from 'Redux/Action/actions';
 
 const App = () => {
   const notes = useSelector(({ contacts: { items } }) => items);

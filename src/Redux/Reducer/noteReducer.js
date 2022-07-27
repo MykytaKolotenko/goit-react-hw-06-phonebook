@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { addNote, changeFilter, deleteNote } from './actions';
+import { addNote, changeFilter, deleteNote } from '../Action/actions';
 
 const noteReducer = createReducer(0, {
   [addNote]: (state, action) => ({
