@@ -46,7 +46,6 @@ const InputForm = () => {
 
   const checkUsers = data =>
     notes.find(({ name }) => name.toLowerCase() === data.name.toLowerCase());
-  const alert = () => {};
 
   return (
     <MyForm onSubmit={handleSubmitForm}>
