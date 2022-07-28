@@ -1,26 +1,52 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
 import { MyForm, MyInput } from './styled';
 import { nanoid } from 'nanoid';
+import { useDispatch, useSelector } from 'react-redux';
+import { addNote } from 'Redux/Action/actions';
 
-const InputForm = ({ handleSubmit }) => {
+const InputForm = () => {
+  // Hooks
+
   const [inputName, setInputName] = useState('');
   const [inputPhone, setInputPhone] = useState('');
+  const notes = useSelector(({ contacts: { items } }) => items);
+  const dispatch = useDispatch();
+
+  // Handle functions
 
   const handleInputName = e => setInputName(e.currentTarget.value);
   const handleInputPhone = e => setInputPhone(e.currentTarget.value);
   const handleSubmitForm = e => {
-    const item = handleSubmit(e, {
-      id: nanoid(),
-      name: inputName,
-      phone: inputPhone,
-    });
+    e.preventDefault();
 
-    if (item) {
+    const data = newData();
+
+    if (checkUsers(data)) {
+      alert(`${data.name} is already in contacts`);
+      return false;
+    }
+
+    dispatch(addNote(data));
+
+    if (data) {
       setInputName('');
       setInputPhone('');
     }
+
+    return true;
   };
+
+  // Helpers
+
+  const newData = () => ({
+    id: nanoid(),
+    name: inputName,
+    phone: inputPhone,
+  });
+
+  const checkUsers = data =>
+    notes.find(({ name }) => name.toLowerCase() === data.name.toLowerCase());
+  const alert = () => {};
 
   return (
     <MyForm onSubmit={handleSubmitForm}>
@@ -53,7 +79,3 @@ const InputForm = ({ handleSubmit }) => {
 };
 
 export default InputForm;
-
-InputForm.propType = {
-  handleSubmit: PropTypes.func.isRequired,
-};

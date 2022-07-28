@@ -1,20 +1,32 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Container, List, ListItem, MyBtn } from './styled';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteNote } from 'Redux/Action/actions';
 
-function PhoneList({ contacts, onDelete }) {
+function PhoneList() {
+  const notes = useSelector(({ contacts: { items } }) => items);
+  const filter = useSelector(({ contacts: { filter } }) => filter);
+  const dispatch = useDispatch();
+
+  const deleteUser = deletedId => {
+    dispatch(deleteNote(deletedId));
+  };
+
+  const filterUsers = () =>
+    notes.filter(item => item.name.toLowerCase().includes(filter));
+
   return (
     <Container>
-      {contacts.length === 0 ? (
+      {filterUsers().length === 0 ? (
         <p>There is no user</p>
       ) : (
         <List>
-          {contacts.map(item => (
+          {filterUsers().map(item => (
             <ListItem key={item.id}>
               <p>
                 {item.name}: {item.phone}
               </p>
-              <MyBtn type="button" onClick={() => onDelete(item.id)}>
+              <MyBtn type="button" onClick={() => deleteUser(item.id)}>
                 x
               </MyBtn>
             </ListItem>
@@ -24,16 +36,5 @@ function PhoneList({ contacts, onDelete }) {
     </Container>
   );
 }
-
-PhoneList.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      phone: PropTypes.string.isRequired,
-    })
-  ),
-  onDelete: PropTypes.func.isRequired,
-};
 
 export default PhoneList;
